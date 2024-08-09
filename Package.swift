@@ -5,23 +5,22 @@ let package = Package(
   name: "ESBuildMobile",
   platforms: [
     .macOS(.v10_14),
-    .iOS(.v13),
   ],
   products: [
     .library(
       name: "ESBuildMobile",
-      targets: ["ESBuildMobile"]
+      targets: ["ESBuildMobileWrapper"]
     )
   ],
   targets: [
     .binaryTarget(
-      name: "ESBuildMobileFramework",
+      name: "ESBuildMobile",
       path: "./Sources/ESBuildMobile.xcframework"
     ),
     .target(
-      name: "ESBuildMobile",
+      name: "ESBuildMobileWrapper",
       dependencies: [
-        .target(name: "ESBuildMobileFramework")
+        .target(name: "ESBuildMobile")
       ]
     ),
   ]
