@@ -10,18 +10,18 @@ let package = Package(
   products: [
     .library(
       name: "ESBuildMobile",
-      targets: ["ESBuildMobileWrapper"]
+      targets: ["ESBuildMobile"]
     )
   ],
   targets: [
     .binaryTarget(
-      name: "ESBuildMobile",
-      path: "./Sources/ESBuildMobile/ESBuildMobile.xcframework"
+      name: "ESBuildMobileFramework",
+      path: "./Sources/ESBuildMobile.xcframework"
     ),
     .target(
-      name: "ESBuildMobileWrapper",
+      name: "ESBuildMobile",
       dependencies: [
-        .target(name: "ESBuildMobile")
+        .target(name: "ESBuildMobileFramework")
       ]
     ),
   ]
