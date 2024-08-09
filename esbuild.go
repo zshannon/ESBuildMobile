@@ -8,27 +8,24 @@ import (
 )
 
 type TransformOptions struct {
+	// Change `React.createElement` to custom name
 	JSXFactory string
-}
-
-// `JSXFactory` will replace the creation
-func NewTransformOptions(JSXFactory string) *TransformOptions {
-	return &TransformOptions{}
+	// Change `React.Fragment` to custom name
+	JSXFragment string
 }
 
 // Returns code and error
 // `TransformOptions` is optional
-func Transform(input string, options *TransformOptions) (code string, err error) {
-	JSXFactory := ""
+func TransformJSX(input string, options *TransformOptions) (code string, err error) {
 
-	if options != nil {
-		JSXFactory = options.JSXFactory
+	if options == nil {
+		options = &TransformOptions{}
 	}
 
 	result := api.Transform(input, api.TransformOptions{
-		Loader:     api.LoaderJSX,
-		Target:     api.Target(api.EngineIOS),
-		JSXFactory: JSXFactory,
+		Loader:      api.LoaderJSX,
+		JSXFactory:  options.JSXFactory,
+		JSXFragment: options.JSXFragment,
 	})
 
 	code = string(result.Code)
