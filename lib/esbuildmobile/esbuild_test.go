@@ -9,13 +9,15 @@ func TestTransform(t *testing.T) {
 	jsx := `
 	// import * as React from 'react'
 	// import * as ReactDOM from 'react-dom'
-	ReactDOM.render(
-		<text>Hello World!</text>,
-		document.getElementById('root')
-	);
+        (value => {
+            const host = createElement()
+            render(<text>{value}</text>, host)
+            return host.element
+		}
+        )
 	`
 
-	code, err := TransformJSX(jsx, &TransformOptions{jSXFactory: "hi"})
+	code, err := TransformJSX(jsx, &TransformOptions{jSXFactory: "banana", jSXFragment: "pizza"})
 
 	if err != nil {
 		t.Fatal("could not format jsx: ", err)

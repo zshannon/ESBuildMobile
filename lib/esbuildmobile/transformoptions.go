@@ -15,6 +15,6 @@ func (t *TransformOptions) SetJSXFactory(newJSXFactory string) *TransformOptions
 
 // Change `React.Fragment` to custom name
 func (t *TransformOptions) SetJSXFragment(newJSXFragment string) *TransformOptions {
-	t.jSXFactory = newJSXFragment
+	t.jSXFragment = newJSXFragment
 	return t
 }

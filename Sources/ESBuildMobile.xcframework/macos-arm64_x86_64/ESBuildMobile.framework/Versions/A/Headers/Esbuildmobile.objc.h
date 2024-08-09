@@ -24,7 +24,7 @@
  */
 - (EsbuildmobileTransformOptions* _Nullable)setJSXFactory:(NSString* _Nullable)newJSXFactory;
 /**
- * Change `React.createElement` to custom name
+ * Change `React.Fragment` to custom name
  */
 - (EsbuildmobileTransformOptions* _Nullable)setJSXFragment:(NSString* _Nullable)newJSXFragment;
 @end
