@@ -279,4 +279,14 @@ final class ESBuildMobileTests: XCTestCase {
         XCTAssertTrue(result2.contains("h("))
         XCTAssertTrue(result2.contains("Second"))
     }
+
+    func testBasicBuild() throws {
+        let code = "export const foo = 'bar'"
+        let options = BuildOptions()
+        options.bundle = true
+        options.format = .esm
+        let builder = Builder(options)
+        let result = try builder.build(code)
+        XCTAssertTrue(result.contains("foo"))
+    }
 }

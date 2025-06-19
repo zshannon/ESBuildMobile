@@ -55,8 +55,6 @@ func TransformJSX(input string, options *TransformOptions) (code string, err err
 		JSXDev:            options.JSXDev,
 		JSXSideEffects:    options.JSXSideEffects,
 		TsconfigRaw:       options.TsconfigRaw,
-		Banner:            options.Banner,
-		Footer:            options.Footer,
 		Define:            options.Define,
 		Pure:              options.Pure,
 		KeepNames:         options.KeepNames,
@@ -71,4 +69,50 @@ func TransformJSX(input string, options *TransformOptions) (code string, err err
 	}
 
 	return code, err
+}
+
+// Build compiles JavaScript using esbuild's build API with stdin.
+// Returns the bundled code as a string if Write is false.
+// `BuildOptions` is optional.
+func Build(input string, options *BuildOptions) (code string, err error) {
+	if options == nil {
+		options = &BuildOptions{}
+	}
+
+	loader := options.Loader
+	if loader == 0 {
+		loader = api.LoaderJS
+	}
+
+	result := api.Build(api.BuildOptions{
+		Stdin: &api.StdinOptions{
+			Contents:   input,
+			Sourcefile: options.Sourcefile,
+			Loader:     loader,
+		},
+		Bundle:            options.Bundle,
+		Write:             false,
+		Outfile:           options.Outfile,
+		Platform:          options.Platform,
+		Format:            options.Format,
+		Target:            options.Target,
+		Sourcemap:         options.Sourcemap,
+		GlobalName:        options.GlobalName,
+		MinifyWhitespace:  options.MinifyWhitespace,
+		MinifyIdentifiers: options.MinifyIdentifiers,
+		MinifySyntax:      options.MinifySyntax,
+		Define:            options.Define,
+		LogLevel:          options.LogLevel,
+		LogLimit:          options.LogLimit,
+	})
+
+	if len(result.Errors) != 0 {
+		err = fmt.Errorf("error: %v", result.Errors[0].Text)
+		return
+	}
+
+	if len(result.OutputFiles) > 0 {
+		code = string(result.OutputFiles[0].Contents)
+	}
+	return
 }
