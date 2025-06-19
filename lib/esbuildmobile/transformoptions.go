@@ -55,13 +55,11 @@ type TransformOptions struct {
 }
 
 // Change `React.createElement` to custom name
-func (t *TransformOptions) SetJSXFactory(newJSXFactory string) *TransformOptions {
-	t.JSXFactory = newJSXFactory
-	return t
+func (t *TransformOptions) ConfigureJSXFactory(factoryName string) {
+	t.JSXFactory = factoryName
 }
 
 // Change `React.Fragment` to custom name
-func (t *TransformOptions) SetJSXFragment(newJSXFragment string) *TransformOptions {
-	t.JSXFragment = newJSXFragment
-	return t
+func (t *TransformOptions) ConfigureJSXFragment(fragmentName string) {
+	t.JSXFragment = fragmentName
 }

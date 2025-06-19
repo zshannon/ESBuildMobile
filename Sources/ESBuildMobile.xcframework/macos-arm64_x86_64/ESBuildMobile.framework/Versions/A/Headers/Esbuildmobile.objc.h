@@ -19,14 +19,76 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
+// skipped field TransformOptions.Color with unsupported type: github.com/evanw/esbuild/pkg/api.StderrColor
+
+// skipped field TransformOptions.LogLevel with unsupported type: github.com/evanw/esbuild/pkg/api.LogLevel
+
+@property (nonatomic) long logLimit;
+// skipped field TransformOptions.LogOverride with unsupported type: map[string]github.com/evanw/esbuild/pkg/api.LogLevel
+
+// skipped field TransformOptions.Sourcemap with unsupported type: github.com/evanw/esbuild/pkg/api.SourceMap
+
+@property (nonatomic) NSString* _Nonnull sourceRoot;
+// skipped field TransformOptions.SourcesContent with unsupported type: github.com/evanw/esbuild/pkg/api.SourcesContent
+
+// skipped field TransformOptions.Target with unsupported type: github.com/evanw/esbuild/pkg/api.Target
+
+// skipped field TransformOptions.Engines with unsupported type: []github.com/evanw/esbuild/pkg/api.Engine
+
+// skipped field TransformOptions.Supported with unsupported type: map[string]bool
+
+// skipped field TransformOptions.Platform with unsupported type: github.com/evanw/esbuild/pkg/api.Platform
+
+// skipped field TransformOptions.Format with unsupported type: github.com/evanw/esbuild/pkg/api.Format
+
+@property (nonatomic) NSString* _Nonnull globalName;
+@property (nonatomic) NSString* _Nonnull mangleProps;
+@property (nonatomic) NSString* _Nonnull reserveProps;
+// skipped field TransformOptions.MangleQuoted with unsupported type: github.com/evanw/esbuild/pkg/api.MangleQuoted
+
+// skipped field TransformOptions.MangleCache with unsupported type: map[string]interface{}
+
+// skipped field TransformOptions.Drop with unsupported type: github.com/evanw/esbuild/pkg/api.Drop
+
+// skipped field TransformOptions.DropLabels with unsupported type: []string
+
+@property (nonatomic) BOOL minifyWhitespace;
+@property (nonatomic) BOOL minifyIdentifiers;
+@property (nonatomic) BOOL minifySyntax;
+@property (nonatomic) long lineLimit;
+// skipped field TransformOptions.Charset with unsupported type: github.com/evanw/esbuild/pkg/api.Charset
+
+// skipped field TransformOptions.TreeShaking with unsupported type: github.com/evanw/esbuild/pkg/api.TreeShaking
+
+@property (nonatomic) BOOL ignoreAnnotations;
+// skipped field TransformOptions.LegalComments with unsupported type: github.com/evanw/esbuild/pkg/api.LegalComments
+
+// skipped field TransformOptions.JSX with unsupported type: github.com/evanw/esbuild/pkg/api.JSX
+
+@property (nonatomic) NSString* _Nonnull jsxFactory;
+@property (nonatomic) NSString* _Nonnull jsxFragment;
+@property (nonatomic) NSString* _Nonnull jsxImportSource;
+@property (nonatomic) BOOL jsxDev;
+@property (nonatomic) BOOL jsxSideEffects;
+@property (nonatomic) NSString* _Nonnull tsconfigRaw;
+@property (nonatomic) NSString* _Nonnull banner;
+@property (nonatomic) NSString* _Nonnull footer;
+// skipped field TransformOptions.Define with unsupported type: map[string]string
+
+// skipped field TransformOptions.Pure with unsupported type: []string
+
+@property (nonatomic) BOOL keepNames;
+@property (nonatomic) NSString* _Nonnull sourcefile;
+// skipped field TransformOptions.Loader with unsupported type: github.com/evanw/esbuild/pkg/api.Loader
+
 /**
  * Change `React.createElement` to custom name
  */
-- (EsbuildmobileTransformOptions* _Nullable)setJSXFactory:(NSString* _Nullable)newJSXFactory;
+- (void)configureJSXFactory:(NSString* _Nullable)factoryName;
 /**
  * Change `React.Fragment` to custom name
  */
-- (EsbuildmobileTransformOptions* _Nullable)setJSXFragment:(NSString* _Nullable)newJSXFragment;
+- (void)configureJSXFragment:(NSString* _Nullable)fragmentName;
 @end
 
 /**
