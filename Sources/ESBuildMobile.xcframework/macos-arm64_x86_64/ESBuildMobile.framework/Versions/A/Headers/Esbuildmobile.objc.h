@@ -18,7 +18,10 @@
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
+/**
+ * NewTransformOptions creates a new TransformOptions with default values
+ */
+- (nullable instancetype)init;
 // skipped field TransformOptions.Color with unsupported type: github.com/evanw/esbuild/pkg/api.StderrColor
 
 // skipped field TransformOptions.LogLevel with unsupported type: github.com/evanw/esbuild/pkg/api.LogLevel
@@ -82,6 +85,68 @@
 // skipped field TransformOptions.Loader with unsupported type: github.com/evanw/esbuild/pkg/api.Loader
 
 /**
+ * Configure banner text
+ */
+- (void)configureBanner:(NSString* _Nullable)banner;
+// skipped method TransformOptions.ConfigureCharset with unsupported parameter or return types
+
+/**
+ * Configure charset by string
+ */
+- (void)configureCharsetByString:(NSString* _Nullable)charset;
+// skipped method TransformOptions.ConfigureColor with unsupported parameter or return types
+
+/**
+ * Configure color by string
+ */
+- (void)configureColorByString:(NSString* _Nullable)color;
+// skipped method TransformOptions.ConfigureDefine with unsupported parameter or return types
+
+/**
+ * Configure define by key-value pairs
+ */
+- (void)configureDefineEntry:(NSString* _Nullable)key value:(NSString* _Nullable)value;
+// skipped method TransformOptions.ConfigureDrop with unsupported parameter or return types
+
+/**
+ * Configure drop by string
+ */
+- (void)configureDropByString:(NSString* _Nullable)drop;
+// skipped method TransformOptions.ConfigureDropLabels with unsupported parameter or return types
+
+// skipped method TransformOptions.ConfigureDropLabelsBySlice with unsupported parameter or return types
+
+// skipped method TransformOptions.ConfigureEngines with unsupported parameter or return types
+
+/**
+ * Configure footer text
+ */
+- (void)configureFooter:(NSString* _Nullable)footer;
+// skipped method TransformOptions.ConfigureFormat with unsupported parameter or return types
+
+/**
+ * Configure format by string
+ */
+- (void)configureFormatByString:(NSString* _Nullable)format;
+/**
+ * Configure global name for UMD bundles
+ */
+- (void)configureGlobalName:(NSString* _Nullable)name;
+/**
+ * Configure ignore annotations
+ */
+- (void)configureIgnoreAnnotations:(BOOL)enabled;
+// skipped method TransformOptions.ConfigureJSX with unsupported parameter or return types
+
+/**
+ * Configure JSX mode by string
+ */
+- (void)configureJSXByString:(NSString* _Nullable)jsx;
+/**
+ * Configure JSX development mode
+ */
+- (void)configureJSXDev:(BOOL)enabled;
+/**
  * Change `React.createElement` to custom name
  */
 - (void)configureJSXFactory:(NSString* _Nullable)factoryName;
@@ -89,7 +154,140 @@
  * Change `React.Fragment` to custom name
  */
 - (void)configureJSXFragment:(NSString* _Nullable)fragmentName;
+/**
+ * Configure JSX import source
+ */
+- (void)configureJSXImportSource:(NSString* _Nullable)importSource;
+/**
+ * Configure JSX side effects
+ */
+- (void)configureJSXSideEffects:(BOOL)enabled;
+/**
+ * Configure keep names option
+ */
+- (void)configureKeepNames:(BOOL)enabled;
+// skipped method TransformOptions.ConfigureLegalComments with unsupported parameter or return types
+
+/**
+ * Configure legal comments by string
+ */
+- (void)configureLegalCommentsByString:(NSString* _Nullable)comments;
+/**
+ * Configure line limit
+ */
+- (void)configureLineLimit:(long)limit;
+// skipped method TransformOptions.ConfigureLoader with unsupported parameter or return types
+
+/**
+ * Configure loader by string
+ */
+- (void)configureLoaderByString:(NSString* _Nullable)loader;
+// skipped method TransformOptions.ConfigureLogLevel with unsupported parameter or return types
+
+/**
+ * Configure log level by string
+ */
+- (void)configureLogLevelByString:(NSString* _Nullable)level;
+/**
+ * Configure log limit
+ */
+- (void)configureLogLimit:(long)limit;
+// skipped method TransformOptions.ConfigureLogOverride with unsupported parameter or return types
+
+// skipped method TransformOptions.ConfigureMangleCache with unsupported parameter or return types
+
+/**
+ * Configure mangle properties pattern
+ */
+- (void)configureMangleProps:(NSString* _Nullable)pattern;
+// skipped method TransformOptions.ConfigureMangleQuoted with unsupported parameter or return types
+
+/**
+ * Configure mangle quoted by string
+ */
+- (void)configureMangleQuotedByString:(NSString* _Nullable)quoted;
+/**
+ * Configure identifier minification
+ */
+- (void)configureMinifyIdentifiers:(BOOL)enabled;
+/**
+ * Configure syntax minification
+ */
+- (void)configureMinifySyntax:(BOOL)enabled;
+/**
+ * Configure whitespace minification
+ */
+- (void)configureMinifyWhitespace:(BOOL)enabled;
+// skipped method TransformOptions.ConfigurePlatform with unsupported parameter or return types
+
+/**
+ * Configure platform by string
+ */
+- (void)configurePlatformByString:(NSString* _Nullable)platform;
+// skipped method TransformOptions.ConfigurePure with unsupported parameter or return types
+
+// skipped method TransformOptions.ConfigurePureBySlice with unsupported parameter or return types
+
+/**
+ * Configure reserve properties pattern
+ */
+- (void)configureReserveProps:(NSString* _Nullable)pattern;
+/**
+ * Configure source root directory
+ */
+- (void)configureSourceRoot:(NSString* _Nullable)root;
+/**
+ * Configure source file name
+ */
+- (void)configureSourcefile:(NSString* _Nullable)filename;
+// skipped method TransformOptions.ConfigureSourcemap with unsupported parameter or return types
+
+/**
+ * Configure sourcemap by string
+ */
+- (void)configureSourcemapByString:(NSString* _Nullable)sourcemap;
+// skipped method TransformOptions.ConfigureSourcesContent with unsupported parameter or return types
+
+/**
+ * Configure sources content by string
+ */
+- (void)configureSourcesContentByString:(NSString* _Nullable)content;
+// skipped method TransformOptions.ConfigureSupported with unsupported parameter or return types
+
+/**
+ * Configure supported feature
+ */
+- (void)configureSupportedFeature:(NSString* _Nullable)feature supported:(BOOL)supported;
+// skipped method TransformOptions.ConfigureTarget with unsupported parameter or return types
+
+/**
+ * Configure target by string
+ */
+- (void)configureTargetByString:(NSString* _Nullable)target;
+// skipped method TransformOptions.ConfigureTreeShaking with unsupported parameter or return types
+
+/**
+ * Configure tree shaking by string
+ */
+- (void)configureTreeShakingByString:(NSString* _Nullable)shaking;
+/**
+ * Configure raw tsconfig content
+ */
+- (void)configureTsconfigRaw:(NSString* _Nullable)config;
+/**
+ * WithJSXFactory sets the JSX factory function name (e.g., "React.createElement")
+ */
+- (void)withJSXFactory:(NSString* _Nullable)factoryName;
+/**
+ * WithJSXFragment sets the JSX fragment function name (e.g., "React.Fragment")
+ */
+- (void)withJSXFragment:(NSString* _Nullable)fragmentName;
 @end
+
+/**
+ * NewTransformOptions creates a new TransformOptions with default values
+ */
+FOUNDATION_EXPORT EsbuildmobileTransformOptions* _Nullable EsbuildmobileNewTransformOptions(void);
 
 /**
  * Returns code and error
