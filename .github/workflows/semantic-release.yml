@@ -32,11 +32,14 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
-      - name: Run tests
+      - name: Run Go tests
         run: make test
 
       - name: Build framework
         run: make build
+
+      - name: Run Swift tests
+        run: swift test
 
       - name: Verify build output
         run: |

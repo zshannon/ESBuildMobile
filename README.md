@@ -18,7 +18,7 @@ Add this package to your Swift Package Manager dependencies:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/zshannon/ESBuildMobile", from: "1.1.0")
+    .package(url: "https://github.com/zshannon/ESBuildMobile", from: "1.2.0")
 ]
 ```
 
