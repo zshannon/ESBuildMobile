@@ -4,9 +4,10 @@ import XCTest
 
 final class ESBuildMobileTests: XCTestCase {
 
-    func testBasicJSXTransformation() throws {
+    func testBasicTransformation() throws {
         let jsx = "<div>Hello World</div>"
-        let result = try JSXTransformer.transform(jsx)
+        let transformer = Transform()
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("Hello World"))
@@ -15,7 +16,7 @@ final class ESBuildMobileTests: XCTestCase {
 
     func testStringExtensionTransform() throws {
         let jsx = "<div>Hello World</div>"
-        let result = try jsx.transformJSX()
+        let result = try jsx.transform()
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("Hello World"))
@@ -25,7 +26,8 @@ final class ESBuildMobileTests: XCTestCase {
     func testReactPreset() throws {
         let jsx = "<div>Test</div>"
         let options = TransformOptions.react()
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("React.createElement"))
@@ -35,7 +37,8 @@ final class ESBuildMobileTests: XCTestCase {
     func testPreactPreset() throws {
         let jsx = "<div>Hello</div>"
         let options = TransformOptions.preact()
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("h("))
@@ -45,7 +48,8 @@ final class ESBuildMobileTests: XCTestCase {
     func testVuePreset() throws {
         let jsx = "<div>Vue Test</div>"
         let options = TransformOptions.vue()
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("h("))
@@ -55,7 +59,8 @@ final class ESBuildMobileTests: XCTestCase {
     func testCustomJSXConfiguration() throws {
         let jsx = "<div>Custom</div>"
         let options = TransformOptions.custom(factory: "createElement", fragment: "Fragment")
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("createElement"))
@@ -66,7 +71,8 @@ final class ESBuildMobileTests: XCTestCase {
         let jsx = "<div>Test</div>"
         let options = TransformOptions()
         options.minifyWhitespace = true
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
         print("Minification result: '\(result)'")
 
         XCTAssertFalse(result.isEmpty, "Expected non-empty result but got: '\(result)'")
@@ -80,7 +86,8 @@ final class ESBuildMobileTests: XCTestCase {
         let options = TransformOptions()
             .jsx(factory: "h", fragment: "Fragment")
 
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
         print("Method chaining result: '\(result)'")
 
         XCTAssertFalse(result.isEmpty, "Expected non-empty result but got: '\(result)'")
@@ -91,7 +98,7 @@ final class ESBuildMobileTests: XCTestCase {
     func testStringExtensionWithOptions() throws {
         let jsx = "<div>Extension Test</div>"
         let options = TransformOptions.preact()
-        let result = try jsx.transformJSX(with: options)
+        let result = try jsx.transform(with: options)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("h("))
@@ -101,7 +108,8 @@ final class ESBuildMobileTests: XCTestCase {
     func testDevelopmentPreset() throws {
         let jsx = "<div>Dev Test</div>"
         let options = TransformOptions.development()
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("React.createElement"))
@@ -110,7 +118,8 @@ final class ESBuildMobileTests: XCTestCase {
 
     func testTransformWithResult() throws {
         let jsx = "<div>Result Test</div>"
-        let transformResult = try JSXTransformer.transformWithResult(jsx)
+        let transformer = Transform()
+        let transformResult = try transformer.transformWithResult(jsx)
 
         XCTAssertFalse(transformResult.code.isEmpty)
         XCTAssertTrue(transformResult.code.contains("React.createElement"))
@@ -124,7 +133,8 @@ final class ESBuildMobileTests: XCTestCase {
         options.jsxFactory = "customFactory"
         options.jsxFragment = "customFragment"
 
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
         print("Mutable options result: '\(result)'")
 
         XCTAssertFalse(result.isEmpty, "Expected non-empty result but got: '\(result)'")
@@ -142,7 +152,8 @@ final class ESBuildMobileTests: XCTestCase {
             </div>
             """
 
-        let result = try JSXTransformer.transform(jsx)
+        let transformer = Transform()
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("React.createElement"))
@@ -157,7 +168,8 @@ final class ESBuildMobileTests: XCTestCase {
         let invalidJSX = "<div><span></div>"
 
         do {
-            let result = try JSXTransformer.transform(invalidJSX)
+            let transformer = Transform()
+            let result = try transformer.transform(invalidJSX)
             // If it succeeds, that's also acceptable as ESBuild can handle some malformed JSX
             XCTAssertFalse(result.isEmpty)
         } catch let error as TransformError {
@@ -180,7 +192,8 @@ final class ESBuildMobileTests: XCTestCase {
         let options = TransformOptions.react()
 
         do {
-            let result = try JSXTransformer.transform(jsx, options: options)
+            let transformer = Transform(options)
+            let result = try transformer.transform(jsx)
             XCTAssertFalse(result.isEmpty)
             // Should contain React.Fragment or similar
             XCTAssertTrue(result.contains("Fragment") || result.contains("React.createElement"))
@@ -193,7 +206,8 @@ final class ESBuildMobileTests: XCTestCase {
     func testReactTypeScriptPreset() throws {
         let jsx = "<div>TypeScript Test</div>"
         let options = TransformOptions.reactTypeScript()
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("React.createElement"))
@@ -205,7 +219,8 @@ final class ESBuildMobileTests: XCTestCase {
         let options = TransformOptions()
         options.globalName = "MyLibrary"
 
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("React.createElement"))
@@ -217,11 +232,51 @@ final class ESBuildMobileTests: XCTestCase {
         options.banner = "/* Header comment */"
         options.footer = "/* Footer comment */"
 
-        let result = try JSXTransformer.transform(jsx, options: options)
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
 
         XCTAssertFalse(result.isEmpty)
         XCTAssertTrue(result.contains("React.createElement"))
         // Note: Banner and footer might not appear in transform mode,
         // but we test that the options don't break the transformation
+    }
+
+    func testTransformWithNewInit() throws {
+        let jsx = "<div>New Init Test</div>"
+        let options = TransformOptions(
+            jsxFactory: "h",
+            jsxFragment: "Fragment",
+            jsx: .transform,
+            minifyWhitespace: true,
+            target: .es2020,
+            loader: .jsx
+        )
+
+        let transformer = Transform(options)
+        let result = try transformer.transform(jsx)
+
+        XCTAssertFalse(result.isEmpty)
+        XCTAssertTrue(result.contains("h("))
+        XCTAssertTrue(result.contains("New Init Test"))
+    }
+
+    func testReuseTransformer() throws {
+        let options = TransformOptions.preact()
+        let transformer = Transform(options)
+
+        // Transform multiple pieces of code with same transformer
+        let jsx1 = "<div>First</div>"
+        let jsx2 = "<span>Second</span>"
+
+        let result1 = try transformer.transform(jsx1)
+        let result2 = try transformer.transform(jsx2)
+
+        XCTAssertFalse(result1.isEmpty)
+        XCTAssertTrue(result1.contains("h("))
+        XCTAssertTrue(result1.contains("First"))
+
+        XCTAssertFalse(result2.isEmpty)
+        XCTAssertTrue(result2.contains("h("))
+        XCTAssertTrue(result2.contains("Second"))
     }
 }

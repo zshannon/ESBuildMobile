@@ -1,6 +1,6 @@
 # ESBuild
 
-A Swift package that provides ESBuild JSX transformation capabilities for mobile development. This package uses `gomobile` to bridge ESBuild's Go API with native Swift, providing an idiomatic Swift API that hides all the underlying complexity.
+A Swift package that provides ESBuild transformation capabilities for mobile development. This package uses `gomobile` to bridge ESBuild's Go API with native Swift, providing an idiomatic Swift API that hides all the underlying complexity.
 
 ## Features
 
@@ -9,8 +9,9 @@ A Swift package that provides ESBuild JSX transformation capabilities for mobile
 - ✅ **Type-Safe Configuration** - Swift enums for all ESBuild options
 - ✅ **Framework Presets** - Built-in configurations for React, Preact, Vue
 - ✅ **Method Chaining** - Fluent API for easy configuration
-- ✅ **String Extensions** - Transform JSX directly on String instances
+- ✅ **String Extensions** - Transform code directly on String instances
 - ✅ **Comprehensive Error Handling** - Swift-native error types
+- ✅ **Reusable Transformers** - Configure once, transform multiple times
 
 ## Installation
 
@@ -30,39 +31,60 @@ import ESBuild
 
 ## Quick Start
 
-### Basic JSX Transformation
+### Basic Transformation
 
 ```swift
 import ESBuild
 
-// Transform JSX with default React settings
-let jsx = "<div>Hello World</div>"
-let result = try JSXTransformer.transform(jsx)
+// Transform with default settings
+let code = "<div>Hello World</div>"
+let transformer = Transform()
+let result = try transformer.transform(code)
 print(result)
 // Output: /* @__PURE__ */ React.createElement("div", null, "Hello World");
 
 // Or use the String extension
-let result = try jsx.transformJSX()
+let result = try code.transform()
 ```
 
 ### Using Presets
 
 ```swift
 // React (default)
-let result = try jsx.transformJSX(with: .react())
+let result = try code.transform(with: TransformOptions.react())
 
 // Preact
-let result = try jsx.transformJSX(with: .preact())
+let transformer = Transform(TransformOptions.preact())
+let result = try transformer.transform(code)
 // Output: /* @__PURE__ */ h("div", null, "Hello World");
 
 // Vue 3
-let result = try jsx.transformJSX(with: .vue())
+let transformer = Transform(TransformOptions.vue())
+let result = try transformer.transform(code)
 
 // Production build (minified)
-let result = try jsx.transformJSX(with: .production())
+let transformer = Transform(TransformOptions.production())
+let result = try transformer.transform(code)
 ```
 
 ## Idiomatic Swift API
+
+### Configure Once, Transform Many
+
+```swift
+// Configure your transformer once
+let transformer = Transform(TransformOptions(
+    jsx: .automatic,
+    minifyWhitespace: true,
+    target: .es2020,
+    format: .esm
+))
+
+// Reuse for multiple transforms
+let result1 = try transformer.transform(jsxCode1)
+let result2 = try transformer.transform(jsxCode2)
+let result3 = try transformer.transform(jsxCode3)
+```
 
 ### Property-Based Configuration
 
@@ -91,18 +113,40 @@ options.loader = .tsx
 options.charset = .utf8
 options.treeShaking = true
 
-let result = try JSXTransformer.transform(jsx, options: options)
+let transformer = Transform(options)
+let result = try transformer.transform(code)
+```
+
+### Convenient Initialization
+
+```swift
+// Initialize with all options at once
+let transformer = Transform(TransformOptions(
+    jsxFactory: "h",
+    jsxFragment: "Fragment",
+    jsx: .automatic,
+    minifyWhitespace: true,
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    format: .esm,
+    platform: .browser,
+    target: .es2020,
+    sourcemap: .inline,
+    loader: .tsx
+))
 ```
 
 ### Method Chaining
 
 ```swift
-let result = try jsx.transformJSX(with:
+let transformer = Transform(
     TransformOptions()
         .jsx(factory: "createElement", fragment: "Fragment")
         .minify()
         .development()
 )
+
+let result = try transformer.transform(code)
 ```
 
 ### Define Variables
@@ -117,6 +161,8 @@ options.define = [
     "process.env.NODE_ENV": "production",
     "__VERSION__": "1.0.0"
 ]
+
+let transformer = Transform(options)
 ```
 
 ## Framework-Specific Examples
@@ -129,11 +175,12 @@ options.jsxDev = true  // For development
 options.target = .es2020
 options.format = .esm
 
-let result = try transformJSX("""
+let transformer = Transform(options)
+let result = try transformer.transform("""
     function Welcome({name}) {
         return <div>Hello, {name}!</div>;
     }
-""", with: options)
+""")
 ```
 
 ### React with TypeScript
@@ -143,7 +190,8 @@ let options = TransformOptions.reactTypeScript()
 options.loader = .tsx
 options.keepNames = true
 
-let result = try transformJSX("""
+let transformer = Transform(options)
+let result = try transformer.transform("""
     interface Props {
         name: string;
     }
@@ -151,7 +199,7 @@ let result = try transformJSX("""
     const Welcome: React.FC<Props> = ({name}) => {
         return <div>Hello, {name}!</div>;
     };
-""", with: options)
+""")
 ```
 
 ### Preact
@@ -161,13 +209,14 @@ let options = TransformOptions.preact()
 options.format = .esm
 options.platform = .browser
 
-let result = try transformJSX("""
+let transformer = Transform(options)
+let result = try transformer.transform("""
     import { h } from 'preact';
 
     export function App() {
         return <div>Hello from Preact!</div>;
     }
-""", with: options)
+""")
 ```
 
 ### Vue 3 JSX
@@ -177,13 +226,14 @@ let options = TransformOptions.vue()
 options.target = .es2020
 options.format = .esm
 
-let result = try transformJSX("""
+let transformer = Transform(options)
+let result = try transformer.transform("""
     export default {
         render() {
             return <div>Hello from Vue JSX!</div>;
         }
     };
-""", with: options)
+""")
 ```
 
 ## Advanced Configuration
@@ -191,54 +241,61 @@ let result = try transformJSX("""
 ### Custom Build Pipeline
 
 ```swift
-let options = TransformOptions()
+let options = TransformOptions(
+    // Configure for modern browsers
+    target: .es2020,
+    platform: .browser,
+    format: .esm,
+    
+    // Enable all optimizations
+    minifyWhitespace: true,
+    minifyIdentifiers: true,
+    minifySyntax: true,
+    treeShaking: true,
+    drop: .console,
+    
+    // Configure source maps for debugging
+    sourcemap: .inline,
+    sourcesContent: .include,
+    
+    // Set up defines for environment
+    define: [
+        "process.env.NODE_ENV": "production",
+        "__DEV__": "false"
+    ]
+)
 
-// Configure for modern browsers
-options.target = .es2020
-options.platform = .browser
-options.format = .esm
-
-// Enable all optimizations
-options.minify()
-options.treeShaking = true
-options.drop = .console
-
-// Configure source maps for debugging
-options.sourcemap = .inline
-options.sourcesContent = .include
-
-// Set up defines for environment
-options.define = [
-    "process.env.NODE_ENV": "production",
-    "__DEV__": "false"
-]
-
-let result = try JSXTransformer.transform(complexJSX, options: options)
+let transformer = Transform(options)
+let result = try transformer.transform(complexCode)
 ```
 
 ### Multiple File Types
 
 ```swift
-// TypeScript JSX
-let tsxOptions = TransformOptions()
-tsxOptions.loader = .tsx
-tsxOptions.target = .es2020
+// TypeScript JSX transformer
+let tsxTransformer = Transform(TransformOptions(
+    loader: .tsx,
+    target: .es2020
+))
 
-// Regular JavaScript
-let jsOptions = TransformOptions()
-jsOptions.loader = .js
-jsOptions.format = .cjs
+// Regular JavaScript transformer
+let jsTransformer = Transform(TransformOptions(
+    loader: .js,
+    format: .cjs
+))
 
-// CSS-in-JS
-let cssOptions = TransformOptions()
-cssOptions.loader = .css
+// CSS-in-JS transformer
+let cssTransformer = Transform(TransformOptions(
+    loader: .css
+))
 ```
 
 ## Error Handling
 
 ```swift
 do {
-    let result = try JSXTransformer.transform(jsx, options: options)
+    let transformer = Transform(options)
+    let result = try transformer.transform(code)
     print("Success: \(result)")
 } catch TransformError.transformationFailed(let message) {
     print("Transform failed: \(message)")
@@ -290,10 +347,19 @@ do {
 - `keepNames: Bool` - Preserve original names
 - `logLevel: LogLevel` - Logging verbosity
 
-## Method Reference
+## API Reference
+
+### Transform Class
+- `Transform()` - Initialize with default options
+- `Transform(TransformOptions)` - Initialize with custom options
+- `transform(_:)` - Transform code and return result string
+- `transformWithResult(_:)` - Transform code and return detailed results
+
+### TransformOptions Initialization
+- `TransformOptions()` - Create with defaults
+- `TransformOptions(...)` - Create with all options as parameters
 
 ### Factory Methods
-- `TransformOptions()` - Create with defaults
 - `TransformOptions.react()` - React preset
 - `TransformOptions.preact()` - Preact preset
 - `TransformOptions.vue()` - Vue 3 preset
@@ -307,11 +373,31 @@ do {
 - `.production()` - Configure for production
 - `.development()` - Configure for development
 
-### Transform Methods
-- `JSXTransformer.transform(_:options:)` - Transform with options
-- `JSXTransformer.transformWithResult(_:options:)` - Get detailed results
-- `String.transformJSX()` - Transform string with defaults
-- `String.transformJSX(with:)` - Transform string with options
+### String Extensions
+- `String.transform()` - Transform string with defaults
+- `String.transform(with:)` - Transform string with options
+
+## Performance Tips
+
+1. **Reuse Transformers**: Create a `Transform` instance once and reuse it for multiple transforms with the same configuration.
+
+```swift
+let transformer = Transform(options)
+let results = try codeFiles.map { try transformer.transform($0) }
+```
+
+2. **Batch Similar Transforms**: Group files with similar transform requirements together.
+
+```swift
+let jsxTransformer = Transform(TransformOptions.react())
+let tsxTransformer = Transform(TransformOptions.reactTypeScript())
+
+// Transform all JSX files
+let jsxResults = try jsxFiles.map { try jsxTransformer.transform($0) }
+
+// Transform all TSX files
+let tsxResults = try tsxFiles.map { try tsxTransformer.transform($0) }
+```
 
 ## Requirements
 

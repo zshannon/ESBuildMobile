@@ -14,6 +14,87 @@ public class TransformOptions {
         self.internalOptions = options
     }
 
+    /// Initialize with custom options
+    public init(
+        jsxFactory: String = "React.createElement",
+        jsxFragment: String = "React.Fragment",
+        jsxImportSource: String = "",
+        jsxDev: Bool = false,
+        jsxSideEffects: Bool = false,
+        jsx: JSXMode = .transform,
+        minifyWhitespace: Bool = false,
+        minifyIdentifiers: Bool = false,
+        minifySyntax: Bool = false,
+        globalName: String = "",
+        format: OutputFormat = .default,
+        platform: Platform = .browser,
+        target: Target = .esnext,
+        sourceRoot: String = "",
+        sourcefile: String = "",
+        sourcemap: SourceMap = .none,
+        sourcesContent: SourcesContent = .include,
+        keepNames: Bool = false,
+        logLevel: LogLevel = .info,
+        logLimit: Int = 0,
+        tsconfigRaw: String = "",
+        banner: String = "",
+        footer: String = "",
+        lineLimit: Int = 80,
+        ignoreAnnotations: Bool = false,
+        mangleProps: String = "",
+        reserveProps: String = "",
+        mangleQuoted: Bool = false,
+        color: ColorMode = .auto,
+        charset: Charset = .utf8,
+        treeShaking: Bool = false,
+        legalComments: LegalComments = .default,
+        drop: DropMode = .none,
+        loader: Loader = .js,
+        define: [String: String] = [:]
+    ) {
+        guard let options = EsbuildmobileNewTransformOptions() else {
+            fatalError("Failed to create ESBuild transform options")
+        }
+        self.internalOptions = options
+
+        // Configure all properties
+        self.jsxFactory = jsxFactory
+        self.jsxFragment = jsxFragment
+        self.jsxImportSource = jsxImportSource
+        self.jsxDev = jsxDev
+        self.jsxSideEffects = jsxSideEffects
+        self.jsx = jsx
+        self.minifyWhitespace = minifyWhitespace
+        self.minifyIdentifiers = minifyIdentifiers
+        self.minifySyntax = minifySyntax
+        self.globalName = globalName
+        self.format = format
+        self.platform = platform
+        self.target = target
+        self.sourceRoot = sourceRoot
+        self.sourcefile = sourcefile
+        self.sourcemap = sourcemap
+        self.sourcesContent = sourcesContent
+        self.keepNames = keepNames
+        self.logLevel = logLevel
+        self.logLimit = logLimit
+        self.tsconfigRaw = tsconfigRaw
+        self.banner = banner
+        self.footer = footer
+        self.lineLimit = lineLimit
+        self.ignoreAnnotations = ignoreAnnotations
+        self.mangleProps = mangleProps
+        self.reserveProps = reserveProps
+        self.mangleQuoted = mangleQuoted
+        self.color = color
+        self.charset = charset
+        self.treeShaking = treeShaking
+        self.legalComments = legalComments
+        self.drop = drop
+        self.loader = loader
+        self.define = define
+    }
+
     // MARK: - JSX Configuration
 
     /// The JSX factory function name (e.g., "React.createElement", "h")
@@ -422,33 +503,33 @@ public struct TransformResult {
 // MARK: - Main Transformer
 
 /// Main interface for JSX transformation
-public struct JSXTransformer {
+public struct Transform {
 
-    /// Transforms JSX code using the specified options
-    /// - Parameters:
-    ///   - jsx: The JSX string to transform
-    ///   - options: Transform options (uses React defaults if nil)
-    /// - Returns: The transformed JavaScript code
+    private let options: TransformOptions
+
+    /// Initialize with transform options
+    /// - Parameter options: Transform options (uses default if nil)
+    public init(_ options: TransformOptions? = nil) {
+        self.options = options ?? TransformOptions()
+    }
+
+    /// Transforms code using the configured options
+    /// - Parameter code: The code string to transform
+    /// - Returns: The transformed code
     /// - Throws: TransformError if transformation fails
-    public static func transform(_ jsx: String, options: TransformOptions? = nil) throws -> String {
-        let result = try transformWithResult(jsx, options: options)
+    public func transform(_ code: String) throws -> String {
+        let result = try transformWithResult(code)
         return result.code
     }
 
-    /// Transforms JSX code and returns detailed results
-    /// - Parameters:
-    ///   - jsx: The JSX string to transform
-    ///   - options: Transform options (uses React defaults if nil)
+    /// Transforms code and returns detailed results
+    /// - Parameter code: The code string to transform
     /// - Returns: TransformResult containing code and any warnings
     /// - Throws: TransformError if transformation fails
-    public static func transformWithResult(_ jsx: String, options: TransformOptions? = nil) throws
-        -> TransformResult
-    {
-        let transformOptions = options ?? TransformOptions()
-
+    public func transformWithResult(_ code: String) throws -> TransformResult {
         // Perform the transformation using the internal options
         var error: NSError?
-        let result = EsbuildmobileTransformJSX(jsx, transformOptions._internal, &error)
+        let result = EsbuildmobileTransformJSX(code, options._internal, &error)
 
         if let error = error {
             throw TransformError.transformationFailed(error.localizedDescription)
@@ -461,19 +542,21 @@ public struct JSXTransformer {
 // MARK: - Convenience Extensions
 
 extension String {
-    /// Transforms this string as JSX using default React settings
-    /// - Returns: The transformed JavaScript code
+    /// Transforms this string using default settings
+    /// - Returns: The transformed code
     /// - Throws: TransformError if transformation fails
-    public func transformJSX() throws -> String {
-        return try JSXTransformer.transform(self)
+    public func transform() throws -> String {
+        let transformer = Transform()
+        return try transformer.transform(self)
     }
 
-    /// Transforms this string as JSX using the specified options
+    /// Transforms this string using the specified options
     /// - Parameter options: Transform options
-    /// - Returns: The transformed JavaScript code
+    /// - Returns: The transformed code
     /// - Throws: TransformError if transformation fails
-    public func transformJSX(with options: TransformOptions) throws -> String {
-        return try JSXTransformer.transform(self, options: options)
+    public func transform(with options: TransformOptions) throws -> String {
+        let transformer = Transform(options)
+        return try transformer.transform(self)
     }
 }
 
