@@ -17,7 +17,7 @@ func TestTransform(t *testing.T) {
         )
 	`
 
-	code, err := TransformJSX(jsx, &TransformOptions{jSXFactory: "banana", jSXFragment: "pizza"})
+	code, err := TransformJSX(jsx, &TransformOptions{JSXFactory: "banana", JSXFragment: "pizza"})
 
 	if err != nil {
 		t.Fatal("could not format jsx: ", err)
