@@ -1,0 +1,143 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run tests
+      run: make test
+
+    - name: Build framework
+      run: make build
+
+    - name: Verify build output
+      run: |
+        ls -la Sources/
+        if [ ! -d "Sources/ESBuildMobile.xcframework" ]; then
+          echo "ESBuildMobile.xcframework not found!"
+          exit 1
+        fi
+
+    - name: Create framework archive
+      run: |
+        cd Sources
+        zip -r ESBuildMobile.xcframework.zip ESBuildMobile.xcframework/
+        cd ..
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ESBuildMobile.xcframework
+        path: Sources/ESBuildMobile.xcframework.zip
+
+  release:
+    needs: build
+    runs-on: macos-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ESBuildMobile.xcframework
+        path: ./
+
+    - name: Generate version
+      id: version
+      run: |
+        # Generate version based on date and commit hash
+        VERSION="v$(date +%Y.%m.%d)-$(git rev-parse --short HEAD)"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Generated version: $VERSION"
+
+    - name: Check if release exists
+      id: check_release
+      run: |
+        if gh release view ${{ steps.version.outputs.version }} > /dev/null 2>&1; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      if: steps.check_release.outputs.exists == 'false'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        name: Release ${{ steps.version.outputs.version }}
+        body: |
+          ## ESBuildMobile Framework Release
+
+          This release contains the built ESBuildMobile.xcframework for use in iOS, macOS, and other Apple platforms.
+
+          ### Changes
+          - Built from commit: ${{ github.sha }}
+          - Built on: $(date)
+
+          ### Usage
+          1. Download the `ESBuildMobile.xcframework.zip` file
+          2. Extract it to your project
+          3. Add the framework to your Xcode project
+
+          ### Swift Package Manager
+          You can also use this framework via Swift Package Manager by adding this repository as a dependency.
+        files: |
+          ESBuildMobile.xcframework.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update Package.swift version comment
+      if: steps.check_release.outputs.exists == 'false'
+      run: |
+        # Update any version comments in Package.swift if they exist
+        if grep -q "// Version:" Package.swift; then
+          sed -i '' "s/\/\/ Version:.*/\/\/ Version: ${{ steps.version.outputs.version }}/" Package.swift
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Package.swift
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update version to ${{ steps.version.outputs.version }}"
+            git push
+          fi
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
