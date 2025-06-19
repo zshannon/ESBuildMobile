@@ -10,10 +10,11 @@ public class BuildOptions {
         guard let opts = EsbuildmobileNewBuildOptions() else {
             fatalError("Failed to create build options")
         }
-        self.internalOptions = opts
+        internalOptions = opts
     }
 
     // MARK: - Basic options
+
     public var bundle: Bool {
         get { internalOptions.bundle }
         set { internalOptions.configureBundle(newValue) }
@@ -89,11 +90,13 @@ public class BuildOptions {
         get { defineMap }
         set {
             defineMap = newValue
-            for (k, v) in newValue { internalOptions.configureDefineEntry(k, value: v) }
+            for (k, v) in newValue {
+                internalOptions.configureDefineEntry(k, value: v)
+            }
         }
     }
 
-    internal var _internal: EsbuildmobileBuildOptions { internalOptions }
+    var _internal: EsbuildmobileBuildOptions { internalOptions }
 }
 
 // MARK: - Build interface
@@ -103,7 +106,7 @@ public enum BuildError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .buildFailed(let msg):
+        case let .buildFailed(msg):
             return "ESBuild build failed: \(msg)"
         }
     }
@@ -126,8 +129,8 @@ public struct Builder {
     }
 }
 
-extension String {
-    public func buildJS(with options: BuildOptions = BuildOptions()) throws -> String {
+public extension String {
+    func buildJS(with options: BuildOptions = BuildOptions()) throws -> String {
         return try Builder(options).build(self)
     }
 }

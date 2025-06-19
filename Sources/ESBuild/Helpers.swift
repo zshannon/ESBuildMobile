@@ -3,7 +3,6 @@ import Foundation
 
 /// A Swift-native wrapper for ESBuild transform options with idiomatic property access
 public class TransformOptions {
-
     private let internalOptions: EsbuildmobileTransformOptions
 
     /// Initialize with default options
@@ -11,7 +10,7 @@ public class TransformOptions {
         guard let options = EsbuildmobileNewTransformOptions() else {
             fatalError("Failed to create ESBuild transform options")
         }
-        self.internalOptions = options
+        internalOptions = options
     }
 
     /// Initialize with custom options
@@ -55,7 +54,7 @@ public class TransformOptions {
         guard let options = EsbuildmobileNewTransformOptions() else {
             fatalError("Failed to create ESBuild transform options")
         }
-        self.internalOptions = options
+        internalOptions = options
 
         // Configure all properties
         self.jsxFactory = jsxFactory
@@ -129,7 +128,7 @@ public class TransformOptions {
 
     /// JSX transformation mode
     public var jsx: JSXMode {
-        get { .transform }  // Default fallback since we can't read the enum
+        get { .transform } // Default fallback since we can't read the enum
         set { internalOptions.configureJSX(by: newValue.rawValue) }
     }
 
@@ -163,19 +162,19 @@ public class TransformOptions {
 
     /// Output format
     public var format: OutputFormat {
-        get { .default }  // Default fallback since we can't read the enum
+        get { .default } // Default fallback since we can't read the enum
         set { internalOptions.configureFormat(by: newValue.rawValue) }
     }
 
     /// Target platform
     public var platform: Platform {
-        get { .browser }  // Default fallback since we can't read the enum
+        get { .browser } // Default fallback since we can't read the enum
         set { internalOptions.configurePlatform(by: newValue.rawValue) }
     }
 
     /// Target ECMAScript version
     public var target: Target {
-        get { .esnext }  // Default fallback since we can't read the enum
+        get { .esnext } // Default fallback since we can't read the enum
         set { internalOptions.configureTarget(by: newValue.rawValue) }
     }
 
@@ -195,13 +194,13 @@ public class TransformOptions {
 
     /// Sourcemap generation mode
     public var sourcemap: SourceMap {
-        get { .none }  // Default fallback since we can't read the enum
+        get { .none } // Default fallback since we can't read the enum
         set { internalOptions.configureSourcemap(by: newValue.rawValue) }
     }
 
     /// Sources content inclusion
     public var sourcesContent: SourcesContent {
-        get { .include }  // Default fallback since we can't read the enum
+        get { .include } // Default fallback since we can't read the enum
         set { internalOptions.configureSourcesContent(by: newValue.rawValue) }
     }
 
@@ -215,7 +214,7 @@ public class TransformOptions {
 
     /// Log level for error reporting
     public var logLevel: LogLevel {
-        get { .info }  // Default fallback since we can't read the enum
+        get { .info } // Default fallback since we can't read the enum
         set { internalOptions.configureLogLevel(by: newValue.rawValue) }
     }
 
@@ -269,43 +268,43 @@ public class TransformOptions {
 
     /// Mangle quoted properties
     public var mangleQuoted: Bool {
-        get { false }  // Default fallback since we can't read the enum
+        get { false } // Default fallback since we can't read the enum
         set { internalOptions.configureMangleQuoted(by: newValue ? "true" : "false") }
     }
 
     /// Color output mode
     public var color: ColorMode {
-        get { .auto }  // Default fallback since we can't read the enum
+        get { .auto } // Default fallback since we can't read the enum
         set { internalOptions.configureColor(by: newValue.rawValue) }
     }
 
     /// Character set for output
     public var charset: Charset {
-        get { .utf8 }  // Default fallback since we can't read the enum
+        get { .utf8 } // Default fallback since we can't read the enum
         set { internalOptions.configureCharset(by: newValue.rawValue) }
     }
 
     /// Tree shaking mode
     public var treeShaking: Bool {
-        get { false }  // Default fallback since we can't read the enum
+        get { false } // Default fallback since we can't read the enum
         set { internalOptions.configureTreeShaking(by: newValue ? "true" : "false") }
     }
 
     /// Legal comments handling
     public var legalComments: LegalComments {
-        get { .default }  // Default fallback since we can't read the enum
+        get { .default } // Default fallback since we can't read the enum
         set { internalOptions.configureLegalComments(by: newValue.rawValue) }
     }
 
     /// Drop mode for console/debugger statements
     public var drop: DropMode {
-        get { .none }  // Default fallback since we can't read the enum
+        get { .none } // Default fallback since we can't read the enum
         set { internalOptions.configureDrop(by: newValue.rawValue) }
     }
 
     /// File loader type
     public var loader: Loader {
-        get { .js }  // Default fallback since we can't read the enum
+        get { .js } // Default fallback since we can't read the enum
         set { internalOptions.configureLoader(by: newValue.rawValue) }
     }
 
@@ -365,7 +364,7 @@ public class TransformOptions {
 
     // MARK: - Internal access
 
-    internal var _internal: EsbuildmobileTransformOptions {
+    var _internal: EsbuildmobileTransformOptions {
         return internalOptions
     }
 }
@@ -373,96 +372,96 @@ public class TransformOptions {
 // MARK: - Enum Types
 
 public enum JSXMode: String, CaseIterable {
-    case transform = "transform"
-    case preserve = "preserve"
-    case automatic = "automatic"
+    case transform
+    case preserve
+    case automatic
 }
 
 public enum OutputFormat: String, CaseIterable {
     case `default` = ""
-    case iife = "iife"
-    case cjs = "cjs"
-    case esm = "esm"
+    case iife
+    case cjs
+    case esm
 }
 
 public enum Platform: String, CaseIterable {
-    case browser = "browser"
-    case node = "node"
-    case neutral = "neutral"
+    case browser
+    case node
+    case neutral
 }
 
 public enum Target: String, CaseIterable {
-    case esnext = "esnext"
-    case es2020 = "es2020"
-    case es2019 = "es2019"
-    case es2018 = "es2018"
-    case es2017 = "es2017"
-    case es2016 = "es2016"
-    case es2015 = "es2015"
-    case es6 = "es6"
-    case es5 = "es5"
+    case esnext
+    case es2020
+    case es2019
+    case es2018
+    case es2017
+    case es2016
+    case es2015
+    case es6
+    case es5
 }
 
 public enum SourceMap: String, CaseIterable {
-    case none = "none"
-    case inline = "inline"
-    case linked = "linked"
-    case external = "external"
-    case both = "both"
+    case none
+    case inline
+    case linked
+    case external
+    case both
 }
 
 public enum SourcesContent: String, CaseIterable {
-    case include = "include"
-    case exclude = "exclude"
+    case include
+    case exclude
 }
 
 public enum LogLevel: String, CaseIterable {
-    case verbose = "verbose"
-    case debug = "debug"
-    case info = "info"
-    case warning = "warning"
-    case error = "error"
-    case silent = "silent"
+    case verbose
+    case debug
+    case info
+    case warning
+    case error
+    case silent
 }
 
 public enum ColorMode: String, CaseIterable {
-    case auto = "auto"
-    case always = "always"
-    case never = "never"
+    case auto
+    case always
+    case never
 }
 
 public enum Charset: String, CaseIterable {
-    case ascii = "ascii"
-    case utf8 = "utf8"
+    case ascii
+    case utf8
 }
 
 public enum LegalComments: String, CaseIterable {
     case `default` = ""
-    case none = "none"
-    case inline = "inline"
-    case eof = "eof"
-    case linked = "linked"
-    case external = "external"
+    case none
+    case inline
+    case eof
+    case linked
+    case external
 }
 
 public enum DropMode: String, CaseIterable {
     case none = ""
-    case console = "console"
-    case debugger = "debugger"
+    case console
+    case debugger
 }
 
 public enum Loader: String, CaseIterable {
-    case js = "js"
-    case jsx = "jsx"
-    case ts = "ts"
-    case tsx = "tsx"
-    case css = "css"
-    case json = "json"
-    case text = "text"
-    case base64 = "base64"
-    case dataurl = "dataurl"
-    case file = "file"
-    case binary = "binary"
+    case js
+    case jsx
+    case ts
+    case tsx
+    case css
+    case json
+    case text
+    case base64
+    case dataurl
+    case file
+    case binary
 }
 
 // MARK: - Error Types
@@ -475,11 +474,11 @@ public enum TransformError: Error, LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .transformationFailed(let message):
+        case let .transformationFailed(message):
             return "JSX transformation failed: \(message)"
-        case .invalidOptions(let message):
+        case let .invalidOptions(message):
             return "Invalid transform options: \(message)"
-        case .internalError(let message):
+        case let .internalError(message):
             return "Internal error: \(message)"
         }
     }
@@ -494,7 +493,7 @@ public struct TransformResult {
     public let warnings: [String]
 
     /// Creates a new transform result
-    internal init(code: String, warnings: [String] = []) {
+    init(code: String, warnings: [String] = []) {
         self.code = code
         self.warnings = warnings
     }
@@ -504,7 +503,6 @@ public struct TransformResult {
 
 /// Main interface for JSX transformation
 public struct Transform {
-
     private let options: TransformOptions
 
     /// Initialize with transform options
@@ -541,11 +539,11 @@ public struct Transform {
 
 // MARK: - Convenience Extensions
 
-extension String {
+public extension String {
     /// Transforms this string using default settings
     /// - Returns: The transformed code
     /// - Throws: TransformError if transformation fails
-    public func transform() throws -> String {
+    func transform() throws -> String {
         let transformer = Transform()
         return try transformer.transform(self)
     }
@@ -554,7 +552,7 @@ extension String {
     /// - Parameter options: Transform options
     /// - Returns: The transformed code
     /// - Throws: TransformError if transformation fails
-    public func transform(with options: TransformOptions) throws -> String {
+    func transform(with options: TransformOptions) throws -> String {
         let transformer = Transform(options)
         return try transformer.transform(self)
     }
@@ -562,9 +560,9 @@ extension String {
 
 // MARK: - Preset Factory Methods
 
-extension TransformOptions {
+public extension TransformOptions {
     /// Creates TransformOptions configured for React
-    public static func react() -> TransformOptions {
+    static func react() -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = "React.createElement"
         options.jsxFragment = "React.Fragment"
@@ -572,7 +570,7 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions configured for Preact
-    public static func preact() -> TransformOptions {
+    static func preact() -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = "h"
         options.jsxFragment = "Fragment"
@@ -580,7 +578,7 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions configured for Vue 3
-    public static func vue() -> TransformOptions {
+    static func vue() -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = "h"
         options.jsxFragment = "Fragment"
@@ -588,7 +586,7 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions with custom JSX configuration
-    public static func custom(factory: String, fragment: String) -> TransformOptions {
+    static func custom(factory: String, fragment: String) -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = factory
         options.jsxFragment = fragment
@@ -596,17 +594,17 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions configured for production (minified)
-    public static func production() -> TransformOptions {
+    static func production() -> TransformOptions {
         return TransformOptions().production()
     }
 
     /// Creates TransformOptions configured for development
-    public static func development() -> TransformOptions {
+    static func development() -> TransformOptions {
         return TransformOptions().development()
     }
 
     /// Preset for React with TypeScript
-    public static func reactTypeScript() -> TransformOptions {
+    static func reactTypeScript() -> TransformOptions {
         let options = TransformOptions.react()
         options.loader = .tsx
         options.keepNames = true

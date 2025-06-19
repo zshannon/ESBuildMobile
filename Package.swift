@@ -4,13 +4,13 @@ import PackageDescription
 let package = Package(
     name: "ESBuildMobile",
     platforms: [
-        .macOS(.v10_14)
+        .macOS(.v10_14),
     ],
     products: [
         .library(
             name: "ESBuild",
             targets: ["ESBuild"]
-        )
+        ),
     ],
     targets: [
         .binaryTarget(
@@ -20,7 +20,7 @@ let package = Package(
         .target(
             name: "ESBuild",
             dependencies: [
-                .target(name: "ESBuildMobile")
+                .target(name: "ESBuildMobile"),
                 // .byName(name: "ESBuildMobile")
             ]
         ),

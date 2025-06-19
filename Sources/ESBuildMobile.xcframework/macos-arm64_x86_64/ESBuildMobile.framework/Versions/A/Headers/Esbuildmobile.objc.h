@@ -11,7 +11,73 @@
 #include "Universe.objc.h"
 
 
+@class EsbuildmobileBuildOptions;
 @class EsbuildmobileTransformOptions;
+
+@interface EsbuildmobileBuildOptions : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+/**
+ * NewBuildOptions returns BuildOptions with defaults
+ */
+- (nullable instancetype)init;
+@property (nonatomic) BOOL bundle;
+@property (nonatomic) BOOL write;
+@property (nonatomic) NSString* _Nonnull outfile;
+// skipped field BuildOptions.Platform with unsupported type: github.com/evanw/esbuild/pkg/api.Platform
+
+// skipped field BuildOptions.Format with unsupported type: github.com/evanw/esbuild/pkg/api.Format
+
+// skipped field BuildOptions.Target with unsupported type: github.com/evanw/esbuild/pkg/api.Target
+
+// skipped field BuildOptions.Sourcemap with unsupported type: github.com/evanw/esbuild/pkg/api.SourceMap
+
+@property (nonatomic) BOOL minifyWhitespace;
+@property (nonatomic) BOOL minifyIdentifiers;
+@property (nonatomic) BOOL minifySyntax;
+@property (nonatomic) NSString* _Nonnull globalName;
+// skipped field BuildOptions.Define with unsupported type: map[string]string
+
+// skipped field BuildOptions.LogLevel with unsupported type: github.com/evanw/esbuild/pkg/api.LogLevel
+
+@property (nonatomic) long logLimit;
+// skipped field BuildOptions.Loader with unsupported type: github.com/evanw/esbuild/pkg/api.Loader
+
+@property (nonatomic) NSString* _Nonnull sourcefile;
+- (void)configureBundle:(BOOL)bundle;
+- (void)configureDefineEntry:(NSString* _Nullable)key value:(NSString* _Nullable)value;
+// skipped method BuildOptions.ConfigureFormat with unsupported parameter or return types
+
+- (void)configureFormatByString:(NSString* _Nullable)format;
+- (void)configureGlobalName:(NSString* _Nullable)n;
+// skipped method BuildOptions.ConfigureLoader with unsupported parameter or return types
+
+- (void)configureLoaderByString:(NSString* _Nullable)loader;
+// skipped method BuildOptions.ConfigureLogLevel with unsupported parameter or return types
+
+- (void)configureLogLevelByString:(NSString* _Nullable)level;
+- (void)configureLogLimit:(long)l;
+- (void)configureMinifyIdentifiers:(BOOL)v;
+- (void)configureMinifySyntax:(BOOL)v;
+- (void)configureMinifyWhitespace:(BOOL)v;
+- (void)configureOutfile:(NSString* _Nullable)outfile;
+// skipped method BuildOptions.ConfigurePlatform with unsupported parameter or return types
+
+/**
+ * Helper config methods using string values for gomobile compatibility
+ */
+- (void)configurePlatformByString:(NSString* _Nullable)platform;
+- (void)configureSourcefile:(NSString* _Nullable)sf;
+// skipped method BuildOptions.ConfigureSourcemap with unsupported parameter or return types
+
+- (void)configureSourcemapByString:(NSString* _Nullable)sm;
+// skipped method BuildOptions.ConfigureTarget with unsupported parameter or return types
+
+- (void)configureTargetByString:(NSString* _Nullable)target;
+- (void)configureWrite:(BOOL)write;
+@end
 
 @interface EsbuildmobileTransformOptions : NSObject <goSeqRefInterface> {
 }
@@ -283,6 +349,18 @@
  */
 - (void)withJSXFragment:(NSString* _Nullable)fragmentName;
 @end
+
+/**
+ * Build compiles JavaScript using esbuild's build API with stdin.
+Returns the bundled code as a string if Write is false.
+`BuildOptions` is optional.
+ */
+FOUNDATION_EXPORT NSString* _Nonnull EsbuildmobileBuild(NSString* _Nullable input, EsbuildmobileBuildOptions* _Nullable options, NSError* _Nullable* _Nullable error);
+
+/**
+ * NewBuildOptions returns BuildOptions with defaults
+ */
+FOUNDATION_EXPORT EsbuildmobileBuildOptions* _Nullable EsbuildmobileNewBuildOptions(void);
 
 /**
  * NewTransformOptions creates a new TransformOptions with default values
