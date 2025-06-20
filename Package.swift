@@ -1,16 +1,14 @@
-// swift-tools-version:5.3
+// swift-tools-version:6.1
 import PackageDescription
 
 let package = Package(
     name: "ESBuildMobile",
-    platforms: [
-        .macOS(.v10_14),
-    ],
+    platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(
             name: "ESBuild",
             targets: ["ESBuild"]
-        ),
+        )
     ],
     targets: [
         .binaryTarget(
@@ -20,7 +18,7 @@ let package = Package(
         .target(
             name: "ESBuild",
             dependencies: [
-                .target(name: "ESBuildMobile"),
+                .target(name: "ESBuildMobile")
                 // .byName(name: "ESBuildMobile")
             ]
         ),

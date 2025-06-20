@@ -1,0 +1,8 @@
+framework module "ESBuildMobile" {
+	header "ref.h"
+    header "Esbuildmobile.objc.h"
+    header "Universe.objc.h"
+    header "ESBuildMobile.h"
+
+    export *
+}
