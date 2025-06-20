@@ -25,12 +25,10 @@ final class BuildTests: XCTestCase {
             target: .es2015,
             jsxFactory: "_FLICKCORE_$REACT.createElement",
             jsxFragment: "_FLICKCORE_$REACT.Fragment",
+            plugins: [.reactGlobalTransform()],
             loader: .jsx
         )
 
-        // Use the pre-built React global transform plugin
-        let reactPlugin = Plugin.reactGlobalTransform()
-        options.addPlugin(reactPlugin)
         XCTAssertEqual(1, options.plugins.count)
         let result = try Builder(options).build(jsx)
         XCTAssertFalse(result.isEmpty)

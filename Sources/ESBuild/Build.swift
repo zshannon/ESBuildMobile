@@ -25,6 +25,7 @@ public class BuildOptions {
         minifySyntax: Bool = false,
         minifyWhitespace: Bool = false,
         minifyIdentifiers: Bool = false,
+        plugins: [Plugin] = [],
         globalName: String? = nil,
         logLevel: LogLevel = .info,
         logLimit: Int = 5,
@@ -49,6 +50,9 @@ public class BuildOptions {
         self.minifySyntax = minifySyntax
         self.minifyWhitespace = minifyWhitespace
         self.minifyIdentifiers = minifyIdentifiers
+        for plugin in plugins {
+            internalOptions.add(plugin._internal)
+        }
         if let loader = loader {
             self.loader = loader
         }
