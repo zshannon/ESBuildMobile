@@ -3,7 +3,6 @@ import XCTest
 @testable import ESBuild
 
 final class ESBuildMobileTests: XCTestCase {
-
     func testBasicTransformation() throws {
         let jsx = "<div>Hello World</div>"
         let transformer = Transform()
@@ -71,6 +70,8 @@ final class ESBuildMobileTests: XCTestCase {
         let jsx = "<div>Test</div>"
         let options = TransformOptions()
         options.minifyWhitespace = true
+        options.target = .es2017
+        XCTAssertEqual(options.target, .es2017)
         let transformer = Transform(options)
         let result = try transformer.transform(jsx)
         print("Minification result: '\(result)'")
@@ -78,7 +79,8 @@ final class ESBuildMobileTests: XCTestCase {
         XCTAssertFalse(result.isEmpty, "Expected non-empty result but got: '\(result)'")
         XCTAssertTrue(
             result.contains("React.createElement"),
-            "Expected React.createElement but got: '\(result)'")
+            "Expected React.createElement but got: '\(result)'"
+        )
     }
 
     func testMethodChaining() throws {
@@ -139,18 +141,19 @@ final class ESBuildMobileTests: XCTestCase {
 
         XCTAssertFalse(result.isEmpty, "Expected non-empty result but got: '\(result)'")
         XCTAssertTrue(
-            result.contains("customFactory"), "Expected customFactory but got: '\(result)'")
+            result.contains("customFactory"), "Expected customFactory but got: '\(result)'"
+        )
         XCTAssertTrue(result.contains("Mutable Test"), "Expected Mutable Test but got: '\(result)'")
     }
 
     func testComplexJSX() throws {
         let jsx = """
-            <div className="container">
-                <h1>Title</h1>
-                <p>Paragraph with <span>nested</span> content</p>
-                <button onClick={handleClick}>Click me</button>
-            </div>
-            """
+        <div className="container">
+            <h1>Title</h1>
+            <p>Paragraph with <span>nested</span> content</p>
+            <button onClick={handleClick}>Click me</button>
+        </div>
+        """
 
         let transformer = Transform()
         let result = try transformer.transform(jsx)
@@ -175,11 +178,11 @@ final class ESBuildMobileTests: XCTestCase {
         } catch let error as TransformError {
             // If it fails, verify we get the right error type
             switch error {
-            case .transformationFailed(let message):
+            case let .transformationFailed(message):
                 XCTAssertFalse(message.isEmpty)
-            case .invalidOptions(let message):
+            case let .invalidOptions(message):
                 XCTAssertFalse(message.isEmpty)
-            case .internalError(let message):
+            case let .internalError(message):
                 XCTAssertFalse(message.isEmpty)
             }
         } catch {
@@ -278,5 +281,21 @@ final class ESBuildMobileTests: XCTestCase {
         XCTAssertFalse(result2.isEmpty)
         XCTAssertTrue(result2.contains("h("))
         XCTAssertTrue(result2.contains("Second"))
+    }
+
+    func testBasicBuild() throws {
+        let code = "export const foo = 'bar'"
+        let options = BuildOptions(bundle: true, format: .esm, target: .es2017)
+        XCTAssertEqual(options.target, .es2017)
+        let builder = Builder(options)
+        let result = try builder.build(code)
+        XCTAssertTrue(result.contains("foo"))
+    }
+
+    func testPlatformOption() throws {
+        let buildOptions = BuildOptions(platform: .neutral)
+        XCTAssertEqual(buildOptions.platform, .neutral)
+        let transformOptions = TransformOptions(platform: .neutral)
+        XCTAssertEqual(transformOptions.platform, .neutral)
     }
 }

@@ -2,6 +2,9 @@
 
 A Swift package that provides ESBuild transformation capabilities for mobile development. This package uses `gomobile` to bridge ESBuild's Go API with native Swift, providing an idiomatic Swift API that hides all the underlying complexity.
 
+## Note to humans
+**Most of the package was written by Claude 4. The repo quality is very bad as a result. Sorry.**
+
 ## Features
 
 - ✅ **Idiomatic Swift API** - Native Swift properties and method chaining
@@ -246,18 +249,18 @@ let options = TransformOptions(
     target: .es2020,
     platform: .browser,
     format: .esm,
-    
+
     // Enable all optimizations
     minifyWhitespace: true,
     minifyIdentifiers: true,
     minifySyntax: true,
     treeShaking: true,
     drop: .console,
-    
+
     // Configure source maps for debugging
     sourcemap: .inline,
     sourcesContent: .include,
-    
+
     // Set up defines for environment
     define: [
         "process.env.NODE_ENV": "production",

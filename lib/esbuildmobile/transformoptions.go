@@ -527,3 +527,162 @@ func (t *TransformOptions) ConfigureSupportedFeature(feature string, supported b
 	}
 	t.Supported[feature] = supported
 }
+
+// Getter methods for current TransformOptions values
+func (t *TransformOptions) GetPlatform() int       { return int(t.Platform) }
+func (t *TransformOptions) GetFormat() int         { return int(t.Format) }
+func (t *TransformOptions) GetTarget() int         { return int(t.Target) }
+func (t *TransformOptions) GetSourcemap() int      { return int(t.Sourcemap) }
+func (t *TransformOptions) GetLogLevel() int       { return int(t.LogLevel) }
+func (t *TransformOptions) GetLoader() int         { return int(t.Loader) }
+func (t *TransformOptions) GetColor() int          { return int(t.Color) }
+func (t *TransformOptions) GetSourcesContent() int { return int(t.SourcesContent) }
+func (t *TransformOptions) GetMangleQuoted() int   { return int(t.MangleQuoted) }
+func (t *TransformOptions) GetDrop() int           { return int(t.Drop) }
+func (t *TransformOptions) GetCharset() int        { return int(t.Charset) }
+func (t *TransformOptions) GetTreeShaking() int    { return int(t.TreeShaking) }
+func (t *TransformOptions) GetLegalComments() int  { return int(t.LegalComments) }
+func (t *TransformOptions) GetJSX() int            { return int(t.JSX) }
+
+// Set methods using enum values as integers
+func (t *TransformOptions) SetPlatformByInt(platform int)   { t.Platform = api.Platform(platform) }
+func (t *TransformOptions) SetFormatByInt(format int)       { t.Format = api.Format(format) }
+func (t *TransformOptions) SetTargetByInt(target int)       { t.Target = api.Target(target) }
+func (t *TransformOptions) SetSourcemapByInt(sourcemap int) { t.Sourcemap = api.SourceMap(sourcemap) }
+func (t *TransformOptions) SetLogLevelByInt(logLevel int)   { t.LogLevel = api.LogLevel(logLevel) }
+func (t *TransformOptions) SetLoaderByInt(loader int)       { t.Loader = api.Loader(loader) }
+func (t *TransformOptions) SetColorByInt(color int)         { t.Color = api.StderrColor(color) }
+func (t *TransformOptions) SetSourcesContentByInt(content int) {
+	t.SourcesContent = api.SourcesContent(content)
+}
+func (t *TransformOptions) SetMangleQuotedByInt(quoted int) {
+	t.MangleQuoted = api.MangleQuoted(quoted)
+}
+func (t *TransformOptions) SetDropByInt(drop int)           { t.Drop = api.Drop(drop) }
+func (t *TransformOptions) SetCharsetByInt(charset int)     { t.Charset = api.Charset(charset) }
+func (t *TransformOptions) SetTreeShakingByInt(shaking int) { t.TreeShaking = api.TreeShaking(shaking) }
+func (t *TransformOptions) SetLegalCommentsByInt(comments int) {
+	t.LegalComments = api.LegalComments(comments)
+}
+func (t *TransformOptions) SetJSXByInt(jsx int) { t.JSX = api.JSX(jsx) }
+
+// Getter methods for slices and maps (return length/size info)
+func (t *TransformOptions) GetEnginesCount() int    { return len(t.Engines) }
+func (t *TransformOptions) GetPureCount() int       { return len(t.Pure) }
+func (t *TransformOptions) GetDropLabelsCount() int { return len(t.DropLabels) }
+
+// Getter methods for string array elements
+func (t *TransformOptions) GetPure(index int) string {
+	if index >= 0 && index < len(t.Pure) {
+		return t.Pure[index]
+	}
+	return ""
+}
+
+func (t *TransformOptions) GetDropLabel(index int) string {
+	if index >= 0 && index < len(t.DropLabels) {
+		return t.DropLabels[index]
+	}
+	return ""
+}
+
+// Getter methods for map sizes
+func (t *TransformOptions) GetDefineCount() int      { return len(t.Define) }
+func (t *TransformOptions) GetLogOverrideCount() int { return len(t.LogOverride) }
+func (t *TransformOptions) GetSupportedCount() int   { return len(t.Supported) }
+func (t *TransformOptions) GetMangleCacheCount() int { return len(t.MangleCache) }
+
+// Individual key getter methods (since slices aren't supported by gomobile)
+func (t *TransformOptions) GetDefineKey(index int) string {
+	if t.Define == nil {
+		return ""
+	}
+	i := 0
+	for k := range t.Define {
+		if i == index {
+			return k
+		}
+		i++
+	}
+	return ""
+}
+
+func (t *TransformOptions) GetLogOverrideKey(index int) string {
+	if t.LogOverride == nil {
+		return ""
+	}
+	i := 0
+	for k := range t.LogOverride {
+		if i == index {
+			return k
+		}
+		i++
+	}
+	return ""
+}
+
+func (t *TransformOptions) GetSupportedKey(index int) string {
+	if t.Supported == nil {
+		return ""
+	}
+	i := 0
+	for k := range t.Supported {
+		if i == index {
+			return k
+		}
+		i++
+	}
+	return ""
+}
+
+// Methods to get values from maps by key
+func (t *TransformOptions) GetDefineValue(key string) string {
+	if t.Define == nil {
+		return ""
+	}
+	return t.Define[key]
+}
+
+func (t *TransformOptions) GetLogOverrideValue(key string) int {
+	if t.LogOverride == nil {
+		return int(api.LogLevelInfo)
+	}
+	return int(t.LogOverride[key])
+}
+
+func (t *TransformOptions) GetSupportedValue(key string) bool {
+	if t.Supported == nil {
+		return false
+	}
+	return t.Supported[key]
+}
+
+// Methods to set map values by key with integer enum values
+func (t *TransformOptions) SetLogOverrideValueByInt(key string, value int) {
+	if t.LogOverride == nil {
+		t.LogOverride = make(map[string]api.LogLevel)
+	}
+	t.LogOverride[key] = api.LogLevel(value)
+}
+
+// Array manipulation methods
+func (t *TransformOptions) AddPure(fn string) {
+	t.Pure = append(t.Pure, fn)
+}
+
+func (t *TransformOptions) AddDropLabel(label string) {
+	t.DropLabels = append(t.DropLabels, label)
+}
+
+func (t *TransformOptions) AddEngine(name string, version string) {
+	
+}
+
+// Clear methods for arrays and maps
+func (t *TransformOptions) ClearEngines()     { t.Engines = nil }
+func (t *TransformOptions) ClearPure()        { t.Pure = nil }
+func (t *TransformOptions) ClearDropLabels()  { t.DropLabels = nil }
+func (t *TransformOptions) ClearDefine()      { t.Define = nil }
+func (t *TransformOptions) ClearLogOverride() { t.LogOverride = nil }
+func (t *TransformOptions) ClearSupported()   { t.Supported = nil }
+func (t *TransformOptions) ClearMangleCache() { t.MangleCache = nil }
