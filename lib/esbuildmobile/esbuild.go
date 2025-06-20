@@ -76,35 +76,30 @@ func TransformJSX(input string, options *TransformOptions) (code string, err err
 // `BuildOptions` is optional.
 func Build(input string, options *BuildOptions) (code string, err error) {
 	if options == nil {
-		options = &BuildOptions{}
+		options = NewBuildOptions()
 	}
 
-	loader := options.Loader
-	if loader == 0 {
-		loader = api.LoaderJS
-	}
+	// Convert to API BuildOptions
+	buildOpts := options.ToAPIBuildOptions()
 
-	result := api.Build(api.BuildOptions{
-		Stdin: &api.StdinOptions{
+	// Set up stdin if input is provided
+	if input != "" {
+		loader := options.LoaderSingle
+		if loader == 0 {
+			loader = api.LoaderJS
+		}
+
+		buildOpts.Stdin = &api.StdinOptions{
 			Contents:   input,
 			Sourcefile: options.Sourcefile,
 			Loader:     loader,
-		},
-		Bundle:            options.Bundle,
-		Write:             false,
-		Outfile:           options.Outfile,
-		Platform:          options.Platform,
-		Format:            options.Format,
-		Target:            options.Target,
-		Sourcemap:         options.Sourcemap,
-		GlobalName:        options.GlobalName,
-		MinifyWhitespace:  options.MinifyWhitespace,
-		MinifyIdentifiers: options.MinifyIdentifiers,
-		MinifySyntax:      options.MinifySyntax,
-		Define:            options.Define,
-		LogLevel:          options.LogLevel,
-		LogLimit:          options.LogLimit,
-	})
+		}
+	}
+
+	// Force Write to false to get output in memory
+	buildOpts.Write = false
+
+	result := api.Build(buildOpts)
 
 	if len(result.Errors) != 0 {
 		err = fmt.Errorf("error: %v", result.Errors[0].Text)

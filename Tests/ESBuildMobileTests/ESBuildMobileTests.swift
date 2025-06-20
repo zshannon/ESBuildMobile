@@ -70,6 +70,8 @@ final class ESBuildMobileTests: XCTestCase {
         let jsx = "<div>Test</div>"
         let options = TransformOptions()
         options.minifyWhitespace = true
+        options.target = .es2017
+        XCTAssertEqual(options.target, .es2017)
         let transformer = Transform(options)
         let result = try transformer.transform(jsx)
         print("Minification result: '\(result)'")
@@ -146,12 +148,12 @@ final class ESBuildMobileTests: XCTestCase {
 
     func testComplexJSX() throws {
         let jsx = """
-        <div className="container">
-            <h1>Title</h1>
-            <p>Paragraph with <span>nested</span> content</p>
-            <button onClick={handleClick}>Click me</button>
-        </div>
-        """
+            <div className="container">
+                <h1>Title</h1>
+                <p>Paragraph with <span>nested</span> content</p>
+                <button onClick={handleClick}>Click me</button>
+            </div>
+            """
 
         let transformer = Transform()
         let result = try transformer.transform(jsx)
@@ -283,11 +285,18 @@ final class ESBuildMobileTests: XCTestCase {
 
     func testBasicBuild() throws {
         let code = "export const foo = 'bar'"
-        let options = BuildOptions()
-        options.bundle = true
-        options.format = .esm
+        let options = BuildOptions(bundle: true, format: .esm, target: .es2017)
+        XCTAssertEqual(options.target, .es2017)
         let builder = Builder(options)
         let result = try builder.build(code)
         XCTAssertTrue(result.contains("foo"))
     }
+
+    func testPlatformOption() throws {
+        let buildOptions = BuildOptions(platform: .neutral)
+        XCTAssertEqual(buildOptions.platform, .neutral)
+        let transformOptions = TransformOptions(platform: .neutral)
+        XCTAssertEqual(transformOptions.platform, .neutral)
+    }
+
 }
