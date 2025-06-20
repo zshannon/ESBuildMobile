@@ -14,7 +14,7 @@ public class Plugin {
         internalPlugin = plugin
     }
 
-    internal init(_ goPlugin: EsbuildmobilePlugin) {
+    init(_ goPlugin: EsbuildmobilePlugin) {
         internalPlugin = goPlugin
     }
 
@@ -114,9 +114,9 @@ public enum PluginNamespaces {
 
 // MARK: - Plugin Builders
 
-extension Plugin {
+public extension Plugin {
     /// Creates a plugin that transforms React imports to use a global variable
-    public static func reactGlobalTransform(globalName: String = "_FLICKCORE_$REACT") -> Plugin {
+    static func reactGlobalTransform(globalName: String = "_FLICKCORE_$REACT") -> Plugin {
         let plugin = Plugin(name: "react-global-transform")
 
         // Transform react imports
@@ -138,12 +138,12 @@ extension Plugin {
     }
 
     /// Creates a plugin that marks all node_modules as external
-    public static func externalizeNodeModules() -> Plugin {
+    static func externalizeNodeModules() -> Plugin {
         let plugin = Plugin(name: "externalize-node-modules")
 
         plugin.addOnResolve(
             filter: PluginFilters.nodeModules,
-            path: "",  // Empty path means keep original
+            path: "", // Empty path means keep original
             external: true
         )
 

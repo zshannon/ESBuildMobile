@@ -6,18 +6,18 @@ import XCTest
 final class BuildTests: XCTestCase {
     func testBasic() throws {
         let jsx = """
-            import { useEffect, useState } from 'react'
-            export default function App() {
-                const [count, setCount] = useState(0);
-                useEffect(() => {
-                    const interval = setInterval(() => {
-                        setCount(count => count + 1);
-                    }, 1000);
-                    return () => clearInterval(interval);
-                }, []);
-                return <text>{`Hello World: ${count}`}</text>;
-            }
-            """
+        import { useEffect, useState } from 'react'
+        export default function App() {
+            const [count, setCount] = useState(0);
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setCount(count => count + 1);
+                }, 1000);
+                return () => clearInterval(interval);
+            }, []);
+            return <text>{`Hello World: ${count}`}</text>;
+        }
+        """
         let options = BuildOptions(
             bundle: true,
             platform: .neutral,
@@ -25,7 +25,7 @@ final class BuildTests: XCTestCase {
             target: .es2015,
             jsxFactory: "_FLICKCORE_$REACT.createElement",
             jsxFragment: "_FLICKCORE_$REACT.Fragment",
-            loader: .jsx,
+            loader: .jsx
         )
 
         // Use the pre-built React global transform plugin
@@ -38,15 +38,17 @@ final class BuildTests: XCTestCase {
             result.contains(
                 """
                 return /* @__PURE__ */ _FLICKCORE_$REACT.createElement("text", null, `Hello World: ${count}`);
-                """))
+                """
+            )
+        )
         XCTAssertTrue(result.contains("import_react.useState"))
     }
 
     func testPluginWithCustomGlobalName() throws {
         let jsx = """
-            import React from 'react'
-            const element = <h1>Test</h1>;
-            """
+        import React from 'react'
+        const element = <h1>Test</h1>;
+        """
 
         let options = BuildOptions(
             bundle: true,
@@ -82,14 +84,14 @@ final class BuildTests: XCTestCase {
 
     func testMultiplePlugins() throws {
         let jsx = """
-            import React, { useState } from 'react'
-            import _ from 'lodash'
+        import React, { useState } from 'react'
+        import _ from 'lodash'
 
-            export default function App() {
-                const [data, setData] = useState([])
-                return <div>{_.join(data, ', ')}</div>
-            }
-            """
+        export default function App() {
+            const [data, setData] = useState([])
+            return <div>{_.join(data, ', ')}</div>
+        }
+        """
 
         let options = BuildOptions(
             bundle: true,
@@ -135,9 +137,9 @@ final class BuildTests: XCTestCase {
         options.addPlugin(plugin)
 
         let code = """
-            import { value } from 'my-custom-module'
-            console.log(value);
-            """
+        import { value } from 'my-custom-module'
+        console.log(value);
+        """
 
         let result = try Builder(options).build(code)
 

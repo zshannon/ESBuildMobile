@@ -328,7 +328,7 @@ public class BuildOptions {
     public var entryPoints: [String] {
         get {
             let count = internalOptions.getEntryPointsCount()
-            return (0..<count).compactMap { internalOptions.getEntryPoint($0) }
+            return (0 ..< count).compactMap { internalOptions.getEntryPoint($0) }
         }
         set {
             internalOptions.clearEntryPoints()
@@ -341,7 +341,7 @@ public class BuildOptions {
     public var external: [String] {
         get {
             let count = internalOptions.getExternalCount()
-            return (0..<count).compactMap { internalOptions.getExternal($0) }
+            return (0 ..< count).compactMap { internalOptions.getExternal($0) }
         }
         set {
             internalOptions.clearExternal()
@@ -354,7 +354,7 @@ public class BuildOptions {
     public var inject: [String] {
         get {
             let count = internalOptions.getInjectCount()
-            return (0..<count).compactMap { internalOptions.getInject($0) }
+            return (0 ..< count).compactMap { internalOptions.getInject($0) }
         }
         set {
             internalOptions.clearInject()
@@ -367,7 +367,7 @@ public class BuildOptions {
     public var pure: [String] {
         get {
             let count = internalOptions.getPureCount()
-            return (0..<count).compactMap { internalOptions.getPure($0) }
+            return (0 ..< count).compactMap { internalOptions.getPure($0) }
         }
         set {
             internalOptions.clearPure()
@@ -382,7 +382,7 @@ public class BuildOptions {
     public var plugins: [Plugin] {
         get {
             let count = internalOptions.getPluginsCount()
-            return (0..<count).compactMap { index in
+            return (0 ..< count).compactMap { index in
                 guard let plugin = internalOptions.getPlugin(index) else { return nil }
                 return Plugin(plugin)
             }
@@ -438,8 +438,8 @@ public struct Builder {
     }
 }
 
-extension String {
-    public func buildJS(with options: BuildOptions = BuildOptions()) throws -> String {
+public extension String {
+    func buildJS(with options: BuildOptions = BuildOptions()) throws -> String {
         return try Builder(options).build(self)
     }
 }

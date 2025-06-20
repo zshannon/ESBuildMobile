@@ -148,12 +148,12 @@ final class ESBuildMobileTests: XCTestCase {
 
     func testComplexJSX() throws {
         let jsx = """
-            <div className="container">
-                <h1>Title</h1>
-                <p>Paragraph with <span>nested</span> content</p>
-                <button onClick={handleClick}>Click me</button>
-            </div>
-            """
+        <div className="container">
+            <h1>Title</h1>
+            <p>Paragraph with <span>nested</span> content</p>
+            <button onClick={handleClick}>Click me</button>
+        </div>
+        """
 
         let transformer = Transform()
         let result = try transformer.transform(jsx)
@@ -298,5 +298,4 @@ final class ESBuildMobileTests: XCTestCase {
         let transformOptions = TransformOptions(platform: .neutral)
         XCTAssertEqual(transformOptions.platform, .neutral)
     }
-
 }

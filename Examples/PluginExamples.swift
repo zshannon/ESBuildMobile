@@ -20,20 +20,20 @@ func basicPluginExample() throws {
 func reactGlobalTransformExample() throws {
     // Example 2: Transform React imports to use a global variable
     let jsx = """
-        import React, { useState } from 'react'
+    import React, { useState } from 'react'
 
-        export default function Counter() {
-            const [count, setCount] = useState(0)
-            return (
-                <div>
-                    <h1>Count: {count}</h1>
-                    <button onClick={() => setCount(count + 1)}>
-                        Increment
-                    </button>
-                </div>
-            )
-        }
-        """
+    export default function Counter() {
+        const [count, setCount] = useState(0)
+        return (
+            <div>
+                <h1>Count: {count}</h1>
+                <button onClick={() => setCount(count + 1)}>
+                    Increment
+                </button>
+            </div>
+        )
+    }
+    """
 
     let options = BuildOptions(
         bundle: true,
@@ -53,9 +53,9 @@ func reactGlobalTransformExample() throws {
 func customGlobalVariableExample() throws {
     // Example 3: Use a custom global variable name
     let jsx = """
-        import React from 'react'
-        const App = () => <div>Hello</div>
-        """
+    import React from 'react'
+    const App = () => <div>Hello</div>
+    """
 
     let options = BuildOptions(
         bundle: true,
@@ -75,13 +75,13 @@ func customGlobalVariableExample() throws {
 func externalizeExample() throws {
     // Example 4: Mark node_modules as external
     let code = """
-        import React from 'react'
-        import lodash from 'lodash'
-        import { format } from 'date-fns'
-        import local from './local-module'
+    import React from 'react'
+    import lodash from 'lodash'
+    import { format } from 'date-fns'
+    import local from './local-module'
 
-        console.log(React, lodash, format, local)
-        """
+    console.log(React, lodash, format, local)
+    """
 
     let options = BuildOptions(bundle: true)
 
@@ -112,23 +112,23 @@ func virtualModuleExample() throws {
         filter: ".*",
         namespace: "virtual",
         contents: """
-            export const config = {
-                apiUrl: 'https://api.example.com',
-                version: '1.0.0',
-                features: {
-                    darkMode: true,
-                    analytics: false
-                }
+        export const config = {
+            apiUrl: 'https://api.example.com',
+            version: '1.0.0',
+            features: {
+                darkMode: true,
+                analytics: false
             }
-            """,
+        }
+        """,
         loader: Int(EsbuildmobileGetLoaderJS())
     )
 
     let code = """
-        import { config } from 'virtual:config'
-        console.log('API URL:', config.apiUrl)
-        console.log('Version:', config.version)
-        """
+    import { config } from 'virtual:config'
+    console.log('API URL:', config.apiUrl)
+    console.log('Version:', config.version)
+    """
 
     let options = BuildOptions(bundle: true)
     options.addPlugin(plugin)
@@ -142,16 +142,16 @@ func virtualModuleExample() throws {
 func multiplePluginsExample() throws {
     // Example 6: Use multiple plugins together
     let code = """
-        import React from 'react'
-        import lodash from 'lodash'
-        import { config } from 'virtual:env'
+    import React from 'react'
+    import lodash from 'lodash'
+    import { config } from 'virtual:env'
 
-        const App = () => {
-            return <div>{config.appName}</div>
-        }
+    const App = () => {
+        return <div>{config.appName}</div>
+    }
 
-        export default App
-        """
+    export default App
+    """
 
     // Create a virtual environment plugin
     let envPlugin = Plugin(name: "env-plugin")
@@ -200,21 +200,21 @@ func cssModuleExample() throws {
         filter: ".*",
         namespace: "css-module",
         contents: """
-            export default {
-                container: 'container_abc123',
-                title: 'title_def456',
-                button: 'button_ghi789'
-            }
-            """,
+        export default {
+            container: 'container_abc123',
+            title: 'title_def456',
+            button: 'button_ghi789'
+        }
+        """,
         loader: Int(EsbuildmobileGetLoaderJS())
     )
 
     let code = """
-        import styles from './styles.module.css'
+    import styles from './styles.module.css'
 
-        console.log(styles.container)
-        console.log(styles.title)
-        """
+    console.log(styles.container)
+    console.log(styles.title)
+    """
 
     let options = BuildOptions(bundle: true)
     options.addPlugin(plugin)
@@ -239,11 +239,11 @@ func pathAliasExample() throws {
     // This is a simplified example
 
     let code = """
-        import { utils } from '@/utils'
-        import { Button } from '@/components/Button'
+    import { utils } from '@/utils'
+    import { Button } from '@/components/Button'
 
-        console.log(utils, Button)
-        """
+    console.log(utils, Button)
+    """
 
     let options = BuildOptions(bundle: true)
     options.addPlugin(plugin)
@@ -297,12 +297,12 @@ func envVariablesExample() throws {
     }
 
     let code = """
-        import NODE_ENV from 'process.env.NODE_ENV'
-        import API_KEY from 'process.env.API_KEY'
+    import NODE_ENV from 'process.env.NODE_ENV'
+    import API_KEY from 'process.env.API_KEY'
 
-        console.log('Environment:', NODE_ENV)
-        console.log('API Key:', API_KEY)
-        """
+    console.log('Environment:', NODE_ENV)
+    console.log('API Key:', API_KEY)
+    """
 
     let options = BuildOptions(bundle: true)
     options.addPlugin(envPlugin)
@@ -315,9 +315,9 @@ func envVariablesExample() throws {
 func builderExtensionExample() throws {
     // Example 11: Use plugins with string extensions
     let jsx = """
-        import React from 'react'
-        export default () => <h1>Hello World</h1>
-        """
+    import React from 'react'
+    export default () => <h1>Hello World</h1>
+    """
 
     // Create custom options with plugins
     let options = BuildOptions(

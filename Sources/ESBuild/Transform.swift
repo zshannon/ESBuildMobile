@@ -314,7 +314,7 @@ public class TransformOptions {
     public var dropLabels: [String] {
         get {
             let count = internalOptions.getDropLabelsCount()
-            return (0..<count).compactMap { internalOptions.getDropLabel($0) }
+            return (0 ..< count).compactMap { internalOptions.getDropLabel($0) }
         }
         set {
             internalOptions.clearDropLabels()
@@ -328,7 +328,7 @@ public class TransformOptions {
     public var pure: [String] {
         get {
             let count = internalOptions.getPureCount()
-            return (0..<count).compactMap { internalOptions.getPure($0) }
+            return (0 ..< count).compactMap { internalOptions.getPure($0) }
         }
         set {
             internalOptions.clearPure()
@@ -343,7 +343,7 @@ public class TransformOptions {
         get {
             let count = internalOptions.getSupportedCount()
             var result: [String: Bool] = [:]
-            for i in 0..<count {
+            for i in 0 ..< count {
                 let key = internalOptions.getSupportedKey(i)
                 if !key.isEmpty {
                     result[key] = internalOptions.getSupportedValue(key)
@@ -378,10 +378,10 @@ public class TransformOptions {
         get {
             let count = internalOptions.getLogOverrideCount()
             var result: [String: LogLevel] = [:]
-            for i in 0..<count {
+            for i in 0 ..< count {
                 let key = internalOptions.getLogOverrideKey(i)
                 if !key.isEmpty,
-                    let level = LogLevel(fromGoValue: internalOptions.getLogOverrideValue(key))
+                   let level = LogLevel(fromGoValue: internalOptions.getLogOverrideValue(key))
                 {
                     result[key] = level
                 }
@@ -400,9 +400,9 @@ public class TransformOptions {
     public var engines: [String] {
         get {
             let count = internalOptions.getEnginesCount()
-            return (0..<count).compactMap { index in
+            return (0 ..< count).compactMap { index in
                 // Note: Engines are complex structs, returning simplified format
-                return "engine\(index)"
+                "engine\(index)"
             }
         }
         set {
@@ -422,7 +422,7 @@ public class TransformOptions {
         get {
             let count = internalOptions.getDefineCount()
             var result: [String: String] = [:]
-            for i in 0..<count {
+            for i in 0 ..< count {
                 let key = internalOptions.getDefineKey(i)
                 if !key.isEmpty {
                     result[key] = internalOptions.getDefineValue(key)
@@ -580,9 +580,9 @@ public struct Transform {
 
 // MARK: - Preset Factory Methods
 
-extension TransformOptions {
+public extension TransformOptions {
     /// Creates TransformOptions configured for React
-    public static func react() -> TransformOptions {
+    static func react() -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = "React.createElement"
         options.jsxFragment = "React.Fragment"
@@ -590,7 +590,7 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions configured for Preact
-    public static func preact() -> TransformOptions {
+    static func preact() -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = "h"
         options.jsxFragment = "Fragment"
@@ -598,7 +598,7 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions configured for Vue 3
-    public static func vue() -> TransformOptions {
+    static func vue() -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = "h"
         options.jsxFragment = "Fragment"
@@ -606,7 +606,7 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions with custom JSX configuration
-    public static func custom(factory: String, fragment: String) -> TransformOptions {
+    static func custom(factory: String, fragment: String) -> TransformOptions {
         let options = TransformOptions()
         options.jsxFactory = factory
         options.jsxFragment = fragment
@@ -614,17 +614,17 @@ extension TransformOptions {
     }
 
     /// Creates TransformOptions configured for production (minified)
-    public static func production() -> TransformOptions {
+    static func production() -> TransformOptions {
         return TransformOptions().production()
     }
 
     /// Creates TransformOptions configured for development
-    public static func development() -> TransformOptions {
+    static func development() -> TransformOptions {
         return TransformOptions().development()
     }
 
     /// Preset for React with TypeScript
-    public static func reactTypeScript() -> TransformOptions {
+    static func reactTypeScript() -> TransformOptions {
         let options = TransformOptions.react()
         options.loader = .tsx
         options.keepNames = true
